@@ -41,7 +41,6 @@ public class AuthorServiceImpl implements AuthorService {
     public Author updateAuthor(Author author, Long id) {
         Author authorCurrent = repository.findById(id).orElseThrow(EntityNotFoundException::new);
         authorCurrent.setName(author.getName());
-        authorCurrent.setBooks(author.getBooks());
         return repository.save(authorCurrent);
     }
 

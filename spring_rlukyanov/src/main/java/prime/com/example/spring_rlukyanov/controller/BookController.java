@@ -27,6 +27,11 @@ public class BookController {
         service.addBook(book);
         return ResponseEntity.ok().body("Successfully created");
     }
+    @DeleteMapping("/delete/connections/{id}")
+    public ResponseEntity<Object> deleteConnections(@PathVariable Long id) {
+        service.deleteConnections(id);
+        return ResponseEntity.ok().body("Successfully created");
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
