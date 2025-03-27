@@ -56,7 +56,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteConnections(Long id) {
         Book bookCurrent = repository.findById(id).orElseThrow(EntityNotFoundException::new);
-        bookCurrent.getConnectedTasks();
+        bookCurrent.getConnectedTasks().removeAll(bookCurrent.getConnectedTasks());
+        bookCurrent.getInverseConnectedTasks().removeAll(bookCurrent.getInverseConnectedTasks());
+        repository.save(bookCurrent);
     }
 
 }
