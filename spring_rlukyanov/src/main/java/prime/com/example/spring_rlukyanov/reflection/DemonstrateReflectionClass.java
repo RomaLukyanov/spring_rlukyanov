@@ -19,6 +19,8 @@ public class DemonstrateReflectionClass {
             return "SecretString";
         }
         private String getPrivateString(String secretString) {
+            String test = "";
+            
             return secretString;
         }
 }

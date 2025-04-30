@@ -19,7 +19,7 @@ import prime.com.example.spring_rlukyanov.reflection.DemonstrateReflectionClass;
 public class ReflectionController {
     @PostMapping("/demonstrate")
     public ResponseEntity<Object> create() {
-        //Демонстрация метода invoke и установка приватных полей класса
+        // Демонстрация метода invoke и установка приватных полей класса
         DemonstrateReflectionClass reflectionObj = new DemonstrateReflectionClass();
         try {
             Field field = reflectionObj.getClass().getDeclaredField("name");
@@ -36,13 +36,14 @@ public class ReflectionController {
         }
         return ResponseEntity.ok().body("Successfully work");
     }
+
     @PostMapping("/demonstrate1")
     public ResponseEntity<Object> demonstrate() throws IllegalAccessException, InvocationTargetException {
         DemonstrateReflectionClass reflectionObj = new DemonstrateReflectionClass();
         try {
             Method method = reflectionObj.getClass().getDeclaredMethod("getPrivateString", String.class);
             method.setAccessible(true);
-            String result = (String) method.invoke(reflectionObj,  "test");
+            String result = (String) method.invoke(reflectionObj, "test");
             return ResponseEntity.ok().body(result);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
