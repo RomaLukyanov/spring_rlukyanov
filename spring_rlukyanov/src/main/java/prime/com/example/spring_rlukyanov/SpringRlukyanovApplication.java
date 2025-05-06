@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import prime.com.example.spring_rlukyanov.controller.CatController;
 import prime.com.example.spring_rlukyanov.model.Book;
@@ -24,14 +25,20 @@ import prime.com.example.spring_rlukyanov.transactional.SimpleTransational;
 import prime.com.example.spring_rlukyanov.exception.MyException;
 
 @SpringBootApplication
+@EnableTransactionManagement
 //@Configurable Не понял как работает
 public class SpringRlukyanovApplication {
 	private static ApplicationContext applicationContext;
 
 	public static void main(String[] args) {
 		applicationContext = SpringApplication.run(SpringRlukyanovApplication.class, args);
-		//SimpleTransational simple = applicationContext.getBean(SimpleTransational.class);
-		SimpleTransational simple = new SimpleTransational();
-		simple.testTransactional();
+		SimpleTransational simple = applicationContext.getBean(SimpleTransational.class);
+		//SimpleTransational simple = new SimpleTransational();
+		try {
+			simple.testTransactional3();
+		} catch (MyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
