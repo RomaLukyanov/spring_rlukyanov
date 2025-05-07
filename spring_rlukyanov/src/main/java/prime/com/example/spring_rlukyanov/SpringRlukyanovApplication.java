@@ -23,6 +23,7 @@ import prime.com.example.spring_rlukyanov.repository.BookRepository;
 import prime.com.example.spring_rlukyanov.service.BookService;
 import prime.com.example.spring_rlukyanov.service.CatService;
 import prime.com.example.spring_rlukyanov.service.impl.CatServiceImpl;
+import prime.com.example.spring_rlukyanov.transactional.PrepareStatementTransactional;
 import prime.com.example.spring_rlukyanov.transactional.SimpleTransational;
 import prime.com.example.spring_rlukyanov.exception.MyException;
 
@@ -33,8 +34,7 @@ public class SpringRlukyanovApplication {
 
 	public static void main(String[] args) {
 		applicationContext = SpringApplication.run(SpringRlukyanovApplication.class, args);
-		CatSelect catSelector = applicationContext.getBean(CatSelect.class);
-		String catName = catSelector.getCatNameById(2L);
-		List<Cat> cats = catSelector.getAllCats();
+		PrepareStatementTransactional classObj = applicationContext.getBean(PrepareStatementTransactional.class);
+		classObj.generateCats();
 	}
 }
