@@ -42,6 +42,20 @@ public class CatSelect {
         return name;
     }
 
+    private String getCatNameLambdaExpresion(Connection connection, Long id) throws SQLException {
+        TExecutor exec = new TExecutor();
+        String name = exec.execQuery(
+                connection,
+                String.format("select name from cat where id=%d", id),
+                resultSet -> {
+                    if (resultSet.next()) {
+                        return resultSet.getString("name");
+                    }
+                    return null;
+                });
+        return name;
+    }
+
     private List getAllCats(Connection connection) throws SQLException {
         try {
             TExecutor exec = new TExecutor();
@@ -77,7 +91,7 @@ public class CatSelect {
     public String getCatNameById(Long id) {
         try {
             Connection connection = dataSource.getConnection();
-            String name = this.getCatName(connection, id);
+            String name = this.getCatNameLambdaExpresion(connection, id);
             return name;
         } catch (SQLException e) {
             e.printStackTrace();
