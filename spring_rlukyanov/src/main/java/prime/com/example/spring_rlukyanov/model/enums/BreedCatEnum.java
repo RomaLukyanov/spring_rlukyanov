@@ -21,7 +21,8 @@ public enum BreedCatEnum {
     private String name;
     
     BreedCatEnum(int id, String name) {
-
+        this.id = id;
+        this.name = name;
     }
 
     @JsonValue

@@ -13,6 +13,10 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.javafaker.Faker;
+
+import prime.com.example.spring_rlukyanov.model.Cat;
+import prime.com.example.spring_rlukyanov.model.enums.BreedCatEnum;
 import prime.com.example.spring_rlukyanov.repository.BookRepository;
 import prime.com.example.spring_rlukyanov.repository.CatRepository;
 
@@ -64,14 +68,23 @@ public class PrepareStatementTransactional {
     }
 
     public void generateCats() {
+        // Множество ключ значение
         Map<Long, String> set = new HashMap<>();
-        set.put(4L, "cat_4");
-        set.put(6L, "cat_6");
+        set.put(7L, "cat_7");
+        set.put(8L, "cat_8");
         try {
             this.execUpdateWithoutTransactional(dataSource.getConnection(), set);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void generateCatsWithRepository() {
+        Cat cat = new Cat();
+        cat.setName("cat_with_breed");
+        BreedCatEnum breed = BreedCatEnum.getById(1);
+        cat.setCatBreed(breed);
+        repository.save(cat);
     }
 
 }

@@ -28,6 +28,7 @@ public class Cat {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
+    private Integer age;
 
     @Enumerated
     @Column(name = "breed_cat_id")
