@@ -5,7 +5,10 @@ import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.github.javafaker.Faker;
@@ -27,13 +30,10 @@ public class SpringRlukyanovApplication {
 
 	public static void main(String[] args) {
 		applicationContext = SpringApplication.run(SpringRlukyanovApplication.class, args);
-		CatGenerator generator = applicationContext.getBean(CatGenerator.class);
-		CatService service = applicationContext.getBean(CatService.class);
-		DogService dogService = applicationContext.getBean(DogService.class);
-		// generator.generateRandomCats(1);
-		//
-		Cat cat1 = service.getCat(752L);
-		Cat cat2 = service.getCat(702L);
-		dogService.bark();
+	}
+
+	@Bean
+	public WebServerFactoryCustomizer<TomcatServletWebServerFactory> customizer() {
+		return factory -> factory.setPort(8081);
 	}
 }
