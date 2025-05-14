@@ -10,9 +10,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.github.javafaker.Faker;
 
+import prime.com.example.spring_rlukyanov.event.EventSource;
 import prime.com.example.spring_rlukyanov.generator.CatGenerator;
 import prime.com.example.spring_rlukyanov.model.Cat;
 import prime.com.example.spring_rlukyanov.service.CatService;
+import prime.com.example.spring_rlukyanov.service.impl.DogService;
 import prime.com.example.spring_rlukyanov.specifiactionslearn.CatSearch;
 import prime.com.example.spring_rlukyanov.specification.CatSpecification;
 //import net.datafaker.Faker;
@@ -27,17 +29,11 @@ public class SpringRlukyanovApplication {
 		applicationContext = SpringApplication.run(SpringRlukyanovApplication.class, args);
 		CatGenerator generator = applicationContext.getBean(CatGenerator.class);
 		CatService service = applicationContext.getBean(CatService.class);
-		// generator.generateRandomCats(10);
-		// List<Cat> result = service.getCatsByName("Sonya");
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("Sonya");
-		list.add("Zander");
-		List<Cat> result = service.getCatsByNames(list);
-		// Cat cat = catSearch.getById(552L);
-		List<Cat> result2 = service.getCustom();
-		for (Cat cat : result2) {
-			System.out.println(cat.toString());
-		}
-		// classObj.generateRandomCat(5);
+		DogService dogService = applicationContext.getBean(DogService.class);
+		// generator.generateRandomCats(1);
+		//
+		Cat cat1 = service.getCat(752L);
+		Cat cat2 = service.getCat(702L);
+		dogService.bark();
 	}
 }
