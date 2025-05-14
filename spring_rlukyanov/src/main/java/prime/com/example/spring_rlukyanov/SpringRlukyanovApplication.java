@@ -31,9 +31,4 @@ public class SpringRlukyanovApplication {
 	public static void main(String[] args) {
 		applicationContext = SpringApplication.run(SpringRlukyanovApplication.class, args);
 	}
-
-	@Bean
-	public WebServerFactoryCustomizer<TomcatServletWebServerFactory> customizer() {
-		return factory -> factory.setPort(8081);
-	}
 }

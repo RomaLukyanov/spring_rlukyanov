@@ -1,52 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<title>Spring Boot WebSocket Chat</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <meta charset="UTF-8" />
+    <title>Spring Boot WebSocket Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
+
 <body>
 
-<h2>Чат на WebSocket</h2>
+    <h2>Чат на WebSocket</h2>
 
-<div id="chat"></div>
+    <div id="chat"></div>
+    <input type="text" id="nameUser" placeholder="Введите ник" />
+    <input type="text" id="messageInput" placeholder="Введите сообщение" />
+    <button onclick="sendMessage()">Отправить</button>
 
-<input type="text" id="messageInput" placeholder="Введите сообщение" />
-<button onclick="sendMessage()">Отправить</button>
+    <script>
+        let stompClient = null;
 
-<script>
-let stompClient = null;
+        function connect() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/messages', function (messageOutput) {
+                    message = JSON.parse(messageOutput.body)
+                    showMessage(message);
+                });
+            });
+        }
 
-function connect() {
-    const socket = new SockJS('/ws');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/messages', function(messageOutput) {
-            showMessage(messageOutput.body);
-        });
-    });
-}
+        function sendMessage() {
+            const message = document.getElementById('messageInput').value;
+            const name = document.getElementById('nameUser').value;
+            console.log(name);
+            let user = {     // объект
+                sender: name,  // под ключом "name" хранится значение "John"
+                message: message        // под ключом "age" хранится значение 30
+            };
+            if (stompClient && message) {
+                stompClient.send('/app/sendMessage', {}, JSON.stringify(user));
+                document.getElementById('messageInput').value = '';
+            }
+        }
 
-function sendMessage() {
-    const message = document.getElementById('messageInput').value;
-    if (stompClient && message) {
-        stompClient.send('/app/sendMessage', {}, message);
-        document.getElementById('messageInput').value = '';
-    }
-}
+        function showMessage(messageObj) {
+            senderName  = messageObj.sender
+            messageText  = messageObj.message
+            const chatDiv = document.getElementById('chat');
+            // Создаем контейнер для сообщения
+            const messageContainer = document.createElement('div');
+            messageContainer.style.border = '1px solid #ccc';
+            messageContainer.style.padding = '5px';
+            messageContainer.style.marginBottom = '5px';
+            messageContainer.style.borderRadius = '4px';
 
-function showMessage(message) {
-    const chatDiv = document.getElementById('chat');
-    const p = document.createElement('p');
-    p.innerText = message;
-    chatDiv.appendChild(p);
-}
+            // Создаем элемент для отправителя
+            const senderElem = document.createElement('p');
+            senderElem.innerText = 'Отправитель: ' + senderName;
+            senderElem.style.fontWeight = 'bold';
+            senderElem.style.margin = '0';
 
-// Подключение при загрузке страницы
-window.onload = connect;
-</script>
+            // Создаем элемент для сообщения
+            const messageElem = document.createElement('p');
+            messageElem.innerText = messageText;
+            messageElem.style.margin = '0';
+
+            // Добавляем элементы в контейнер
+            messageContainer.appendChild(senderElem);
+            messageContainer.appendChild(messageElem);
+
+            // Добавляем контейнер в чат
+            chatDiv.appendChild(messageContainer);
+        }
+
+        // Подключение при загрузке страницы
+        window.onload = connect;
+    </script>
 
 </body>
+
 </html>
